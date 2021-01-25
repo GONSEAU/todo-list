@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TodoItem } from './todo-item';
 
 @Component({
   selector: 'app-root',
@@ -7,22 +8,49 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'todo-list';
-  public todoArray: Array<string> = [
-    'item 1',
-    'item 1',
-    'item 1',
-    'item 1',
-    'alors',
 
-  ];
-  public addItem($event: KeyboardEvent): void {
-    if ($event.code === 'Enter') {
-      const $input: HTMLInputElement|null = $event.target as HTMLInputElement;
+  
 
-      if ($input !== null) {
-        console.log($input.value);
+  public todoArray: Array<TodoItem> = [];
+
+
+  public get atLeastOneChecked(): boolean {
+    for (const item of this.todoArray) {
+      if (item.checked) {
+        return true;
       }
-      console.log('Enter pressed')
     }
+      return false;
+  }
+
+  public addItem($event: KeyboardEvent): void {
+
+    if ($event.code === 'Enter') {
+      const $input: EventTarget | null = $event.target;
+
+      if ($input instanceof HTMLInputElement) {
+        const str = $input.value.trim();
+
+        if (str !== '') {
+          this.todoArray.push({
+            title: str,
+            checked: false,           
+          });
+          $input.value = '';
+        }
+      }
+    }
+  }
+
+  public removeItem(index: number): void {
+
+    if (index > -1 && index < this.todoArray.length) {
+      this.todoArray.splice(index, 1);
+    }    
+  }
+  public clearCompleted(): void {
+    this.todoArray.filter((item: TodoItem) =>{
+      return !item.checked;
+    });
   }
 }

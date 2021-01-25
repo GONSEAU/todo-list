@@ -1,46 +1,43 @@
 <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <h1 class="text-center">
-          Todos
-        </h1>
-  
-        <div class="card">
-          <div class="card-header">
-            <div class="form-group">
-              <input type="text" class="form-control" (keyup)="addItem($event)">
-            </div>
+  <div class="row">
+    <div class="col-12">
+      <h1 class="text-center">
+        Todos
+      </h1>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="form-group">
+            <input type="text" class="form-control" (keyup)="addItem($event)">
           </div>
-  
-          <ul class="list-group list-group-flush">
-            <li *ngFor="let item of todoArray" class="list-group-item d-flex justify-content-between">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                <label class="form-check-label" for="defaultCheck1">
-                  {{ item }}
-                </label>
-              </div>
-  
-              <button class="btn btn-outline-danger btn-sm">
-                x
-              </button>
-            </li>
-  
-            
-  
-          </ul>
-  
-          <div class="card-footer d-flex justify-content-between">
-            <div>
-              {{ todoArray.length }}
+        </div>
+
+        <ul class="list-group list-group-flush">
+          <li *ngFor="let item of todoArray; let itemIndex = index"
+            class="list-group-item d-flex justify-content-between">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox"  [attr.id]="'todo-check-'+ itemIndex" [(ngModel)]="item.checked" >
+              <label class="form-check-label" [class.done]="item.checked" [attr.for]="'todo-check-'+ itemIndex">
+                {{ item.title }}
+              </label>
             </div>
-  
-            <button class="btn btn-sm btn-link">
-              Clear completed
+
+            <button class="btn btn-outline-danger btn-sm" (click)="removeItem(itemIndex)">
+              x
             </button>
+          </li>
+        </ul>
+
+        <div class="card-footer d-flex justify-content-between">
+          <div>
+            {{ todoArray.length }} items
           </div>
+
+          <button *ngIf="atLeastOneChecked" class="btn btn-sm btn-link" (click)="clearCompleted()">
+            Clear completed
+          </button>
         </div>
       </div>
     </div>
   </div>
-  
+</div>
